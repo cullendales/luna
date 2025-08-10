@@ -1,2 +1,2 @@
-# chatles
+# Chatles
 A multimodal AI assistant
