@@ -104,30 +104,6 @@ fn build_card(name: String, reversed: bool, age: String) -> TarotCard {
     TarotCard { name, reversed, age }
 }
 
-// prints out an image in terminal of the tarot card and flips the image if reversed is true
-fn display_tarot(card: &TarotCard) {
-    let conf = Config {
-        width: Some(25),
-        height: Some(20),
-        x: 10,
-        y: 4,
-        ..Default::default()
-    };
-    let img_name = card.name.to_lowercase().replace(" ", "_");
-    let img_path = format!("images/{}.jpg", img_name);
-    if !card.reversed {
-        print!("\x1B[2J\x1B[1;1H");
-        print_from_file(&img_path, &conf).expect("Image printing failed.");
-    } else {
-        let dyn_img = image::open(&img_path).unwrap();
-        let rgba_img = dyn_img.to_rgba8();
-        let rotated = rotate_about_center(&rgba_img, 3.14, Interpolation::Nearest, Rgba([255, 0, 0, 0]));
-        let rotated_dyn = DynamicImage::ImageRgba8(rotated);
-        print!("\x1B[2J\x1B[1;1H");
-        viuer::print(&rotated_dyn, &conf).unwrap();
-    }
-}
-
 // counts specific patterns found in users tarot cards and prints meaning
 fn interpret_patterns(cards: &Vec<TarotCard>){
     let mut count_rev = 0;
@@ -226,11 +202,7 @@ fn main(){
     }
 
     for card in &cards {
-        display_tarot(card);
-        println!("{}: {}{}", card.age, card.name, if card.reversed {" Reversed"} else {""});
-        let _ = gather_meaning(tarot_file, card);
+        let meaning = gather_meaning(tarot_file, card);
     }
-    println!("");
-    interpret_patterns(&cards);
-    println!("");
+    return cards, meaning;
 }
