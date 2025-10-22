@@ -1,6 +1,6 @@
 import subprocess
 import generate_response
-import apps.music.spotify
+import music.spotify
 #from ctypes import cdll #can import c++ files using this
 
 def main():
