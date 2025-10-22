@@ -1,2 +1,2 @@
-# Chatles
+# Luna
 A multimodal AI assistant
