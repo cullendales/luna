@@ -5,6 +5,7 @@ use std::path::Path;
 use viuer::{Config, print_from_file};
 use image::{DynamicImage, Rgba};
 use imageproc::geometric_transformations::{rotate_about_center, Interpolation};
+use std::io::{self, Write};
 
 
 const TAROT_CARDS: [&str; 78] = [
@@ -192,6 +193,7 @@ fn draw_card(drawn_cards: &[usize], age: &str) -> (TarotCard, usize) {
 }
 
 fn main(){
+    println!("here");
     let tarot_file = "tarot_cards.csv";
     let mut cards: Vec<TarotCard> = Vec::new();
     let mut drawn_cards = [0; 3];
@@ -202,7 +204,8 @@ fn main(){
     }
 
     for card in &cards {
-        let meaning = gather_meaning(tarot_file, card);
+        let _ = gather_meaning(tarot_file, card);
     }
-    return cards, meaning;
+    println!("here");
+    io::stdout().flush().unwrap();
 }
