@@ -2,6 +2,11 @@ import subprocess
 from enum import Enum
 #from tarot_reader.fortune import get_fortune
 
+class App(Enum):
+    fortune = "fortune"
+    posture = "posture"
+    joke = "joke"
+
 def launch_tarot_reader():
     get_fortune()
 
@@ -10,11 +15,6 @@ def launch_posture_detection():
 
 def launch_joke_maker():
     subprocess.run(["python3", "apps/jokes/jokes.py"])
-
-class App(Enum):
-    fortune = "fortune"
-    posture = "posture"
-    joke = "joke"
 
 APPS = {
     App.fortune.value: launch_tarot_reader,
