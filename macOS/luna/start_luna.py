@@ -10,6 +10,7 @@ from games.game_launcher import launch_game
 from services.timer import adjust_timer
 from services.volume import adjust_volume
 from question.question import answer_question
+from media.camera.camera_launcher import launch_camera
 
 load_dotenv()
 WAKE_WORD_KEY = os.getenv("porcupine_key")
@@ -82,10 +83,10 @@ def main():
                 launch_game()
             # music
             elif Option.music.value in message:
-                return
+                spotify()
             # camera
-            elif message == Option.photo.value:
-                return
+            elif any(camera_keywords in message):
+                launch_camera()
             # services
             elif Option.timer.value in message:
                 adjust_timer(message)
@@ -97,7 +98,7 @@ def main():
             elif Option.question.value in message:
                 answer_question()
             else:
-                return
+                return #say smth like sorry, couldnt quite get that? For a list of my commands say hey luna options
     
     stream.stop_stream()
     stream.close()
