@@ -4,6 +4,8 @@ import pvporcupine
 import os
 import pyaudio
 import struct
+from pvcheetah import create
+from text_and_audio.stt import get_command
 from dotenv import load_dotenv
 from apps.app_launcher import launch_app
 from games.game_launcher import launch_game
@@ -13,21 +15,22 @@ from question.question import answer_question
 from media.camera.camera_launcher import launch_camera
 
 load_dotenv()
-WAKE_WORD_KEY = os.getenv("porcupine_key")
+PICOVOICE_KEY = os.getenv("porcupine_key")
 OPENAI_KEY = os.getenv("openai_key")
 WAKE_WORD_PATH = "/Users/cullendales/Desktop/luna/luna/models/porcupine.ppn" #put in config
+CHEETAH_PATH = "/Users/cullendales/Desktop/luna/luna/models/cheetah_fast.pv"
 
 class Option(Enum):
     help = "options"
     music = "spotify"
-    fortune = "tell me my fortune"
-    posture = "monitor my posture"
+    fortune = "fortune"
+    posture = "posture"
     photo = "photo"
     video = "video"
     timer = "timer"
-    game = "play a game"
+    game = "game"
     volume = "volume"
-    joke = "tell me a joke"
+    joke = "joke"
     question = "question"
     weather = "weather"
     temperature = "temperature"
@@ -53,8 +56,13 @@ camera_keywords = {
 
 def main():
     porcupine = pvporcupine.create(
-        access_key=WAKE_WORD_KEY,
+        access_key=PICOVOICE_KEY,
         keyword_paths=[WAKE_WORD_PATH],
+    )
+    cheetah = create(
+        access_key=PICOVOICE_KEY,
+        model_path=CHEETAH_PATH,
+        endpoint_duration_sec=0.85,
     )
     pa = pyaudio.PyAudio()
     stream = pa.open(
@@ -70,13 +78,13 @@ def main():
         pcm_unpacked = struct.unpack_from("h" * porcupine.frame_length, pcm)
         keyword_index = porcupine.process(pcm_unpacked)
         if keyword_index >= 0:
-            message = Option.posture.value
+            message = get_command(cheetah)
             message = message.lower()
             # help options
             if message == Option.help.value:
                 return
             # apps
-            elif any(launch_app_keywords in message):
+            elif any(keyword in message for keyword in launch_app_keywords):
                 launch_app(Option.posture.name)
             # games
             elif message == Option.game.value:
@@ -85,12 +93,12 @@ def main():
             elif Option.music.value in message:
                 spotify()
             # camera
-            elif any(camera_keywords in message):
+            elif any(keyword in message for keyword in camera_keywords):
                 launch_camera()
             # services
             elif Option.timer.value in message:
                 adjust_timer(message)
-            elif any(weather_keywords in message):
+            elif any(keyword in message for keyword in weather_keywords):
                 return 
             elif Option.volume.value in message:
                 adjust_volume(message)
@@ -98,7 +106,7 @@ def main():
             elif Option.question.value in message:
                 answer_question()
             else:
-                return #say smth like sorry, couldnt quite get that? For a list of my commands say hey luna options
+                print("couldnt quite get that")  #say smth like sorry, couldnt quite get that? For a list of my commands say hey luna options
     
     stream.stop_stream()
     stream.close()

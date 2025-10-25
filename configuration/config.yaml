@@ -1,0 +1,11 @@
+models:
+    paths:
+        porcupine: /Users/cullendales/Desktop/luna/luna/models/porcupine.ppn
+        cheetah: /Users/cullendales/Desktop/luna/luna/models/cheetah_fast.pv
+
+keys:
+    porcupine: porcupine_key
+    openai: openai_key
+
+log:
+    directory: /Users/cullendales/Desktop/luna/luna/logs
