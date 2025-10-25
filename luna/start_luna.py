@@ -14,6 +14,7 @@ from core.services.volume import adjust_volume
 from core.question.question import answer_question
 from core.media.camera.camera_launcher import launch_camera
 from text_and_audio.tts import respond
+from random import choice
 
 load_dotenv()
 PICOVOICE_KEY = os.getenv("porcupine_key")
@@ -54,6 +55,10 @@ camera_keywords = {
     Option.video.value
 }
 
+acknowledgement = [
+    "Yes?",
+    "What can I help you with?",
+]
 
 def main():
     porcupine = pvporcupine.create(
@@ -79,6 +84,7 @@ def main():
         pcm_unpacked = struct.unpack_from("h" * porcupine.frame_length, pcm)
         keyword_index = porcupine.process(pcm_unpacked)
         if keyword_index >= 0:
+            respond(choice(acknowledgement))
             message = get_command(cheetah)
             message = message.lower()
 
@@ -92,7 +98,7 @@ def main():
                 return
             # apps
             elif app_command:
-                launch_app(app_command)
+                launch_app(app_command, cheetah)
             # games
             elif message == Option.game.value:
                 launch_game()
