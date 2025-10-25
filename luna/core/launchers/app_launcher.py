@@ -1,5 +1,6 @@
 import subprocess
 from enum import Enum
+from text_and_audio.tts import respond
 #from tarot_reader.fortune import get_fortune
 
 FORTUNE = "fortune"
@@ -10,7 +11,8 @@ def launch_tarot_reader():
     get_fortune()
 
 def launch_posture_detection():
-    subprocess.run(["python3", "apps/posture_detection/posture_monitoring.py"])
+    respond("Of course. Monitoring your posture.")
+    subprocess.run(["python3", "core/apps/posture_detection/posture_monitoring.py"])
 
 def launch_joke_maker():
     subprocess.run(["python3", "apps/jokes/jokes.py"])

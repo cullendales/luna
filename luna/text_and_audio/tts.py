@@ -2,7 +2,7 @@ import numpy as np
 import sounddevice as sd
 from piper import PiperVoice
 
-voice = PiperVoice.load("/Users/cullendales/Desktop/luna/luna/voices/en_US-hfc_female-medium.onnx")
+voice = PiperVoice.load("/Users/cullendales/Desktop/luna/luna/text_and_audio/voices/en_US-hfc_female-medium.onnx")
 
 def respond(response):
     audio_gen = voice.synthesize(response)

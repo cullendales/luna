@@ -1,10 +1,16 @@
 import struct
 import sounddevice as sd
 from text_and_audio.tts import respond
+from random import choice
+
+acknowledgement = [
+    "Yes?",
+    "What can I help you with?",
+]
 
 def get_command(cheetah):
-    print("listening to speech...") # put like yes? and other responses here
-    respond("Yes?")
+    print("listening to speech...")
+    respond(choice(acknowledgement))
     transcript = ""
     with sd.RawInputStream(
         samplerate=cheetah.sample_rate,

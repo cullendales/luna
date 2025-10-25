@@ -7,12 +7,13 @@ import struct
 from pvcheetah import create
 from text_and_audio.stt import get_command
 from dotenv import load_dotenv
-from apps.app_launcher import launch_app
-from games.game_launcher import launch_game
-from services.timer import adjust_timer
-from services.volume import adjust_volume
-from question.question import answer_question
-from media.camera.camera_launcher import launch_camera
+from core.launchers.app_launcher import launch_app
+from core.launchers.game_launcher import launch_game
+from core.services.timer import adjust_timer
+from core.services.volume import adjust_volume
+from core.question.question import answer_question
+from core.media.camera.camera_launcher import launch_camera
+from text_and_audio.tts import respond
 
 load_dotenv()
 PICOVOICE_KEY = os.getenv("porcupine_key")
@@ -36,7 +37,7 @@ class Option(Enum):
     temperature = "temperature"
     humidity = "humidity"
 
-launch_app_keywords = {
+app_keywords = {
     Option.posture.value,
     Option.joke.name,
     Option.fortune.name,
@@ -80,12 +81,18 @@ def main():
         if keyword_index >= 0:
             message = get_command(cheetah)
             message = message.lower()
+
+            # iterate through to match keywords for user command
+            app_command = next((keyword for keyword in app_keywords if keyword in message), None)
+            camera_command = next((keyword for keyword in camera_keywords if keyword in message), None)
+            weather_command = next((keyword for keyword in weather_keywords if keyword in message), None)
+            
             # help options
             if message == Option.help.value:
                 return
             # apps
-            elif any(keyword in message for keyword in launch_app_keywords):
-                launch_app(Option.posture.name)
+            elif app_command:
+                launch_app(app_command)
             # games
             elif message == Option.game.value:
                 launch_game()
@@ -93,13 +100,13 @@ def main():
             elif Option.music.value in message:
                 spotify()
             # camera
-            elif any(keyword in message for keyword in camera_keywords):
-                launch_camera()
+            elif camera_command:
+                launch_camera(camera_command)
             # services
             elif Option.timer.value in message:
                 adjust_timer(message)
-            elif any(keyword in message for keyword in weather_keywords):
-                return 
+            elif weather_command:
+                respond("its raining bro") 
             elif Option.volume.value in message:
                 adjust_volume(message)
             # question
