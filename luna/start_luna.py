@@ -1,4 +1,3 @@
-import subprocess
 from enum import Enum
 import pvporcupine
 import os
@@ -9,10 +8,9 @@ from text_and_audio.stt import get_command
 from dotenv import load_dotenv
 from core.launchers.app_launcher import launch_app
 from core.launchers.game_launcher import launch_game
-from core.services.timer import adjust_timer
-from core.services.volume import adjust_volume
-from core.question.question import answer_question
 from core.media.camera.camera_launcher import launch_camera
+from core.launchers.service_launcher import launch_service
+from core.question.question import answer_question
 from text_and_audio.tts import respond
 from random import choice
 
@@ -37,22 +35,30 @@ class Option(Enum):
     weather = "weather"
     temperature = "temperature"
     humidity = "humidity"
+    time = "time"
+    boom = "self destruct"
+    boom2 = "self-destruct"
 
 app_keywords = {
     Option.posture.value,
-    Option.joke.name,
-    Option.fortune.name,
+    Option.joke.value,
+    Option.fortune.value,
+    Option.boom.value,
+    Option.boom2.value,
 }
 
-weather_keywords = {
+service_keywords = {
     Option.weather.value,
     Option.temperature.value,
     Option.humidity.value,
+    Option.timer.value,
+    Option.volume.value,
+    Option.time.value,
 }
 
 camera_keywords = {
     Option.photo.value,
-    Option.video.value
+    Option.video.value,
 }
 
 acknowledgement = [
@@ -91,7 +97,7 @@ def main():
             # iterate through to match keywords for user command
             app_command = next((keyword for keyword in app_keywords if keyword in message), None)
             camera_command = next((keyword for keyword in camera_keywords if keyword in message), None)
-            weather_command = next((keyword for keyword in weather_keywords if keyword in message), None)
+            service_command = next((keyword for keyword in service_keywords if keyword in message), None)
             
             # help options
             if message == Option.help.value:
@@ -109,23 +115,21 @@ def main():
             elif camera_command:
                 launch_camera(camera_command)
             # services
-            elif Option.timer.value in message:
-                adjust_timer(message)
-            elif weather_command:
-                respond("its raining bro") 
-            elif Option.volume.value in message:
-                adjust_volume(message)
-            # question
+            elif service_command:
+                launch_service(service_command, message, cheetah)
+            # questions
             elif Option.question.value in message:
-                answer_question()
+                #answer_question()
+                pass
             else:
-                print("couldnt quite get that")  #say smth like sorry, couldnt quite get that? For a list of my commands say hey luna options
-    
+                respond("Sorry I couldn't quite get that")
+
+    # closing steps but runs forever so lowkey dont need these
     stream.stop_stream()
     stream.close()
     pa.terminate()
     porcupine.delete()
-
+    cheetah.delete()
                 
 if __name__ == "__main__":
     main()
