@@ -5,6 +5,8 @@ import mediapipe as mp
 import os
 from text_and_audio.tts import respond 
 from text_and_audio.stt import get_command
+import queue
+import threading
 
 
 def findDistance(x1, y1, x2, y2):
@@ -22,7 +24,7 @@ def findAngle(x1, y1, x2, y2):
     return degree
 
 
-def side_angle():
+def side_angle(stop_event):
     good_frames = 0
     bad_frames  = 0
     count = 1
@@ -46,7 +48,10 @@ def side_angle():
         print("Error: Could not open webcam.")
         exit()
     
-    while True:
+    while not stop_event.is_set():
+        if stop_event.is_set():
+            print("Stopping posture monitor")
+            return
         ret, frame = cap.read()
         if not ret:
             print("Error: Could not read frame.")
@@ -130,6 +135,8 @@ def side_angle():
         good_time = (1 / fps) * good_frames
         bad_time =  (1 / fps) * bad_frames
         
+        if stop_event.is_set():
+            break
         if good_time > 0:
             time_string_good = 'Good Posture Time : ' + str(round(good_time, 1)) + 's'
             cv2.putText(frame, time_string_good, (10, h - 20), font, 0.9, green, 2)
@@ -148,7 +155,7 @@ def side_angle():
     cv2.destroyAllWindows()
 
 
-def front_angle():
+def front_angle(stop_event):
     good_frames = 0
     bad_frames  = 0
     count = 1
@@ -172,7 +179,10 @@ def front_angle():
         print("Error: Could not open webcam.")
         exit()
     
-    while True:
+    while not stop_event.is_set():
+        if stop_event.is_set():
+            print("Stopping posture monitor")
+            return
         ret, frame = cap.read()
         if not ret:
             print("Error: Could not read frame.")
@@ -225,6 +235,8 @@ def front_angle():
         good_time = (1 / fps) * good_frames
         bad_time =  (1 / fps) * bad_frames
         
+        if stop_event.is_set():
+            break
         if good_time > 0:
             time_string_good = 'Good Posture Time : ' + str(round(good_time, 1)) + 's'
             cv2.putText(frame, time_string_good, (10, h - 20), font, 0.9, green, 2)
@@ -241,7 +253,8 @@ def front_angle():
     cv2.destroyAllWindows()
     
     
-def monitor_posture(cheetah):
+def monitor_posture(cheetah, audio_queue, stop_event):
+    data = audio_queue.get()
     input_flag = False
     print("Welcome to the Posture Monitoring System!")
     respond("Would you like me to monitor your posture from the front or the side?")
@@ -264,9 +277,9 @@ def monitor_posture(cheetah):
             respond("Sorry I couldn't quite get that. Please say front or side")
 
     if camera_angle == "1":
-        side_angle()
+        side_angle(stop_event)
     if camera_angle == "2":
-        front_angle()
+        front_angle(stop_event)
 
 if __name__ == "__main__":
     monitor_posture(cheetah)
