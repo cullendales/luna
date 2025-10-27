@@ -1,2 +1,3 @@
 openai
 piper-tts
+bbc-news

@@ -1,3 +1,8 @@
+import time
+
+def set_timer():
+    start = time.time()
+
 def adjust_timer(message):
     if "cancel" in message:
         return #cancel timer and send feedback
@@ -7,4 +12,7 @@ def adjust_timer(message):
     elif "change" in message:
         return #change timer
     elif "left" in message:
-        return # read out remaining time       
+        return # read out remaining time  
+
+def get_timer():
+    set_timer()    

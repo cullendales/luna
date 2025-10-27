@@ -36,15 +36,14 @@ class Option(Enum):
     temperature = "temperature"
     humidity = "humidity"
     time = "time"
-    boom = "self destruct"
-    boom2 = "self-destruct"
+    boom = "destruct"
+    news = "news"
 
 app_keywords = {
     Option.posture.value,
     Option.joke.value,
     Option.fortune.value,
     Option.boom.value,
-    Option.boom2.value,
 }
 
 service_keywords = {
@@ -54,6 +53,7 @@ service_keywords = {
     Option.timer.value,
     Option.volume.value,
     Option.time.value,
+    Option.news.value,
 }
 
 camera_keywords = {
@@ -123,13 +123,6 @@ def main():
                 pass
             else:
                 respond("Sorry I couldn't quite get that")
-
-    # closing steps but runs forever so lowkey dont need these
-    stream.stop_stream()
-    stream.close()
-    pa.terminate()
-    porcupine.delete()
-    cheetah.delete()
                 
 if __name__ == "__main__":
     main()

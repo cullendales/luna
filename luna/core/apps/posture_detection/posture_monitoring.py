@@ -70,7 +70,9 @@ def side_angle(stop_event):
         # adds in error message for landmarks not being able to be detected. Usually lighting.
         if not lm:
             print("The camera cannot detect your body landmarks accurately. This may be due to lighting or camera position.")
-            print("Please retry the program again.")
+            respond("The camera cannot detect your body landmarks accurately. This may be due to lighting or camera position.")
+            respond("Please relaunch the app again with better lighting")
+            stop_event.set()
             return 
  
         l_shldr_x = int(lm.landmark[lmPose.LEFT_SHOULDER].x * w)
@@ -201,7 +203,9 @@ def front_angle(stop_event):
         # adds in error message for landmarks not being able to be detected. Usually lighting.
         if not lm:
             print("The camera cannot detect your body landmarks accurately. This may be due to lighting or camera position.")
-            print("Please retry the program again.")
+            respond("The camera cannot detect your body landmarks accurately. This may be due to lighting or camera position.")
+            respond("Please relaunch the app again with better lighting")
+            stop_event.set()
             return 
  
         # key landmarks to track
