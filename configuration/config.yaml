@@ -9,3 +9,6 @@ keys:
 
 log:
     directory: /Users/cullendales/Desktop/luna/luna/logs
+
+location:
+    local_time: 
