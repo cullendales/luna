@@ -1,5 +1,5 @@
 # Luna
-Introducing Luna - a multimodal AI assistant. 
+Introducing Luna - a multimodal smart speaker. 
 
 ## About
 Luna is a personilized assistant similar to an Amazon Echo or Google Home.
