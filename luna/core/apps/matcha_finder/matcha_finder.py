@@ -251,7 +251,7 @@ def find_matcha(cheetah):
     all_ratings = []
     correct_option = True
 
-    while answer != "4":
+    while answer != "quit":
 
         if correct_option:
             print("Would you like to filter results more?")
