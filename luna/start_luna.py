@@ -4,7 +4,6 @@ import os
 import pyaudio
 import struct
 from pvcheetah import create
-from text_and_audio.stt import get_command
 from dotenv import load_dotenv
 from core.launchers.app_launcher import launch_app
 from core.launchers.game_launcher import launch_game
@@ -12,6 +11,7 @@ from core.media.camera.camera_launcher import launch_camera
 from core.launchers.service_launcher import launch_service
 from core.question.question import answer_question
 from text_and_audio.tts import respond
+from text_and_audio.stt import get_command
 from random import choice
 
 load_dotenv()
