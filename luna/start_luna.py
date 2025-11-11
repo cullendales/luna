@@ -1,18 +1,19 @@
-from enum import Enum
-import pvporcupine
 import os
-import pyaudio
 import struct
-from pvcheetah import create
-from dotenv import load_dotenv
+from enum import Enum
+from random import choice
+
+import pvporcupine
+import pyaudio
 from core.launchers.app_launcher import launch_app
 from core.launchers.game_launcher import launch_game
+#from core.launchers.service_launcher import launch_service
 from core.media.camera.camera_launcher import launch_camera
-from core.launchers.service_launcher import launch_service
 from core.question.question import answer_question
-from text_and_audio.tts import respond
+from dotenv import load_dotenv
+from pvcheetah import create
 from text_and_audio.stt import get_command
-from random import choice
+from text_and_audio.tts import respond
 
 load_dotenv()
 PICOVOICE_KEY = os.getenv("porcupine_key")
@@ -119,8 +120,7 @@ def main():
                 launch_service(service_command, message, cheetah)
             # questions
             elif Option.question.value in message:
-                #answer_question()
-                pass
+                answer_question(cheetah)
             else:
                 respond("Sorry I couldn't quite get that")
                 

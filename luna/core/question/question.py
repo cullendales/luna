@@ -1,9 +1,18 @@
-from core.question.generate_response import get_answer
+from random import choice
 
-def answer_question():
-    #tts asking what they would like to know and maybe some more options
-    #stt generating text of their question
-    question = ""
-    response = get_answer(question)
-    #tts read out the response
-    
+from core.question.generate_response import get_answer
+from text_and_audio.stt import get_command
+from text_and_audio.tts import respond
+
+acknowledgement = [
+    'yeah',
+    'what can I help you with?',
+    'ask away',
+]
+
+def answer_question(cheetah):
+    respond(choice(acknowledgement))
+    question = get_command(cheetah)
+    question = question.lower()
+    answer = get_answer(question)
+    respond(answer)
