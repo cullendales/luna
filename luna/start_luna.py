@@ -7,7 +7,7 @@ import pvporcupine
 import pyaudio
 from core.launchers.app_launcher import launch_app
 from core.launchers.game_launcher import launch_game
-#from core.launchers.service_launcher import launch_service
+from core.launchers.service_launcher import launch_service
 from core.media.camera.camera_launcher import launch_camera
 from core.question.question import answer_question
 from dotenv import load_dotenv
@@ -39,12 +39,14 @@ class Option(Enum):
     time = "time"
     boom = "destruct"
     news = "news"
+    matcha = "latte"
 
 app_keywords = {
     Option.posture.value,
     Option.joke.value,
     Option.fortune.value,
     Option.boom.value,
+    Option.matcha.value,
 }
 
 service_keywords = {

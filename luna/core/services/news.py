@@ -2,15 +2,23 @@ import bbc
 from text_and_audio.tts import respond
 
 
-def bbc_news():
+def get_news(category="US & Canada news"):
     news = bbc.news.get_news(bbc.Languages.English)
     categories = news.news_categories()
-    for category in categories:
-        section_news = news.news_category(World)
-        for news_dict in section_news[:5]:
-            respond(news_dict['title'])
-            respond(news_dict['summary'])
-            
-def get_news():
-    respond("Certainly, here is the news trending today")
-    bbc_news()
+    print("Available categories:", categories)
+
+    if category not in categories:
+        respond(f"Sorry, I couldn't find the category '{category}'. Showing 'Latest' instead.")
+        category = "Latest"
+
+    section_news = news.news_category(category)
+    for news_dict in section_news[:5]:
+        title = news_dict.get("title")
+        summary = news_dict.get("summary")
+
+        if title:
+            respond(title)
+        if summary and isinstance(summary, str):
+            respond(summary)
+        else:
+            respond("No summary available for this story.")

@@ -15,7 +15,7 @@ audio_queue = queue.Queue()
 FORTUNE = "fortune"
 POSTURE = "posture"
 JOKE = "joke"
-MATCHA = "matcha"
+MATCHA = "latte"
 SELF_DESTRUCT = "destruct"
 POSTURE_APP = "Posture monitoring app"
 POSTURE_RESPONSE = "Of course. Monitoring your posture"
@@ -54,7 +54,7 @@ def launch_self_destruct(cheetah):
 
 def launch_matcha_finder(cheetah):
     respond("Launching matcha finder")
-    launch_matcha_finder(cheetah)
+    find_matcha(cheetah)
 
 
 apps = {
